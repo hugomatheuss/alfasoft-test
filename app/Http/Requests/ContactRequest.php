@@ -11,7 +11,7 @@ class ContactRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->check();
     }
 
     /**
@@ -23,8 +23,8 @@ class ContactRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:5|max:255',
-            'email' => 'required|email|max:255|unique:contacts,email,' . $this->contact,
-            'contact' => 'nullable|digits:20',
+            'email' => 'required|email|max:255|unique:contacts,email,'.$this->contact,
+            'contact' => 'nullable|digits:9',
         ];
     }
 }

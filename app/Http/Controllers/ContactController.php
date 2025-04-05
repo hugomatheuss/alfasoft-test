@@ -8,14 +8,11 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    public function __construct()
-    {
-        //this->middleware('auth')->except('index');
-    }
 
     public function index()
     {
         $contacts = Contact::all();
+
         return view('contacts.index', compact('contacts'));
     }
 

@@ -14,5 +14,4 @@ class Contact extends Model
         'email',
         'contact',
     ];
-
 }
