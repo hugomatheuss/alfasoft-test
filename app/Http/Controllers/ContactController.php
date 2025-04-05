@@ -5,28 +5,29 @@ namespace App\Http\Controllers;
 use App\Enums\DatabaseErrorCode;
 use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ContactController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $contacts = Contact::withTrashed()->get();
 
         return view('contacts.index', compact('contacts'));
     }
 
-    public function create()
+    public function create(): View
     {
         return view('contacts.create');
     }
 
-    public function store(ContactRequest $request)
+    public function store(ContactRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
         try {
-            Contact::create($validated);
+            Contact::query()->create($validated);
 
             return redirect()->route('contacts.index')->with('success', 'Contact created successfully.');
         } catch (\Illuminate\Database\QueryException $e) {
@@ -38,26 +39,26 @@ class ContactController extends Controller
         }
     }
 
-    public function show($id)
+    public function show(int $id): View
     {
-        $contact = Contact::findOrFail($id);
+        $contact = Contact::query()->findOrFail($id);
 
         return view('contacts.show', compact('contact'));
     }
 
-    public function edit($id)
+    public function edit(int $id): View
     {
         return view('contacts.edit', [
-            'contact' => Contact::findOrFail($id),
+            'contact' => Contact::query()->findOrFail($id),
         ]);
     }
 
-    public function update(ContactRequest $request, $id)
+    public function update(ContactRequest $request, int $id): RedirectResponse
     {
         $validated = $request->validated();
 
         try {
-            $contact = Contact::findOrFail($id);
+            $contact = Contact::query()->findOrFail($id);
             $contact->update($validated);
 
             return redirect()->route('contacts.index')->with('success', 'Contact updated successfully.');
@@ -70,10 +71,10 @@ class ContactController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
         try {
-            $contact = Contact::findOrFail($id);
+            $contact = Contact::query()->findOrFail($id);
             $contact->delete();
 
             return redirect()->route('contacts.index')->with('success', 'Contact deleted successfully.');
@@ -82,12 +83,12 @@ class ContactController extends Controller
         }
     }
 
-    public function restore($id)
+    public function restore(int $id): RedirectResponse
     {
         try {
             $contact = Contact::withTrashed()->findOrFail($id);
             $contact->restore();
-    
+
             return redirect()->route('contacts.index')->with('success', 'Contact restored successfully.');
         } catch (\Exception $e) {
             return redirect()->route('contacts.index')->with('error', 'An unexpected error occurred. Please try again later.');

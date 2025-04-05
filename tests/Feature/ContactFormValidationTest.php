@@ -6,7 +6,6 @@ use App\Http\Middleware\VerifyCsrfToken;
 use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -29,7 +28,7 @@ class ContactFormValidationTest extends TestCase
             'email' => 'hugo@email.com',
             'password' => Hash::make('123'),
         ]);
-    
+
         $this->actingAs($user);
 
         $response = $this->withoutMiddleware([VerifyCsrfToken::class])->post(route('contacts.store'), [
@@ -55,7 +54,7 @@ class ContactFormValidationTest extends TestCase
             'email' => 'hugo@email.com',
             'password' => Hash::make('123'),
         ]);
-    
+
         $this->actingAs($user);
 
         $contact = Contact::factory()->create();
