@@ -11,7 +11,7 @@ class ContactController extends Controller
 {
     public function index()
     {
-        $contacts = Contact::all();
+        $contacts = Contact::withTrashed()->get();
 
         return view('contacts.index', compact('contacts'));
     }
@@ -72,6 +72,25 @@ class ContactController extends Controller
 
     public function destroy($id)
     {
-        //
+        try {
+            $contact = Contact::findOrFail($id);
+            $contact->delete();
+
+            return redirect()->route('contacts.index')->with('success', 'Contact deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An unexpected error occurred. Please try again later.');
+        }
+    }
+
+    public function restore($id)
+    {
+        try {
+            $contact = Contact::withTrashed()->findOrFail($id);
+            $contact->restore();
+    
+            return redirect()->route('contacts.index')->with('success', 'Contact restored successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('contacts.index')->with('error', 'An unexpected error occurred. Please try again later.');
+        }
     }
 }

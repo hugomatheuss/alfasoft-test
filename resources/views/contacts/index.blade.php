@@ -28,8 +28,15 @@
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $contact->id }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $contact->name }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $contact->email }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-700">{{ $contact->phone }}</td>
+                            <td class="px-4 py-2 text-sm text-gray-700">{{ $contact->contact }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">
+                            @if ($contact->trashed())
+                                <form action="{{ route('contacts.restore', $contact->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-black font-bold py-1 px-3 rounded">Restore</button>
+                                </form>
+                            @else
                                 <a href="{{ route('contacts.show', $contact->id) }}" class="bg-green-500 hover:bg-green-700 text-black font-bold py-1 px-3 rounded">Show</a>
                                 <a href="{{ route('contacts.edit', $contact->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-black font-bold py-1 px-3 rounded">Edit</a>
                                 <form action="{{ route('contacts.destroy', $contact->id) }}" method="POST" style="display:inline;">
@@ -37,6 +44,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Delete</button>
                                 </form>
+                            @endif
                             </td>
                         </tr>
                     @endforeach
