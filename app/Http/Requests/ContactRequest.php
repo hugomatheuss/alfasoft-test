@@ -23,7 +23,7 @@ class ContactRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:5|max:255',
-            'email' => 'required|email|max:255|unique:contacts,email,',
+            'email' => 'required|email|max:255|unique:contacts,email,'.$this->route('id'),
             'contact' => 'nullable|digits:9',
         ];
     }

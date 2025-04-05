@@ -47,12 +47,27 @@ class ContactController extends Controller
 
     public function edit($id)
     {
-        //
+        return view('contacts.edit', [
+            'contact' => Contact::findOrFail($id),
+        ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(ContactRequest $request, $id)
     {
-        //
+        $validated = $request->validated();
+
+        try {
+            $contact = Contact::findOrFail($id);
+            $contact->update($validated);
+
+            return redirect()->route('contacts.index')->with('success', 'Contact updated successfully.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() === DatabaseErrorCode::UNIQUE_CONSTRAINT_VIOLATION->value) {
+                return redirect()->back()->withInput()->with('error', 'The contact number already exists. Please use a different one.');
+            }
+
+            return redirect()->back()->withInput()->with('error', 'An unexpected error occurred. Please try again later.');
+        }
     }
 
     public function destroy($id)
