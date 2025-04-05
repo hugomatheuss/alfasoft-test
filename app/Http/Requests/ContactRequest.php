@@ -24,7 +24,21 @@ class ContactRequest extends FormRequest
         return [
             'name' => 'required|string|min:5|max:255',
             'email' => 'required|email|max:255|unique:contacts,email,'.$this->route('id'),
-            'contact' => 'nullable|digits:9',
+            'contact' => 'digits:9',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'The name field is required.',
+            'name.min' => 'The name must be at least 5 characters.',
+            'email.required' => 'The email field is required.',
+            'email.email' => 'The email must be a valid email address.',
+            'email.unique' => 'The email has already been taken.',
+            'contact.required' => 'The contact field is required.',
+            'contact.digits' => 'The contact must be exactly 9 digits.',
+            'contact.unique' => 'The contact number already exists. Please use a different one.',
         ];
     }
 }
