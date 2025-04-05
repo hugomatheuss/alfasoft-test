@@ -12,7 +12,7 @@ This repository contains the codebase for the Alfasoft test project.
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:hugomatheuss/alfasoft-test.git
    cd alfasoft-test
    ```
 
