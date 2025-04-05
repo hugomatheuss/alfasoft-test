@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DatabaseErrorCode;
 use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-
     public function index()
     {
         $contacts = Contact::all();
@@ -25,9 +25,17 @@ class ContactController extends Controller
     {
         $validated = $request->validated();
 
-        Contact::create($validated);
+        try {
+            Contact::create($validated);
 
-        return redirect()->route('contacts.index')->with('success', 'Contact created successfully.');
+            return redirect()->route('contacts.index')->with('success', 'Contact created successfully.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() === DatabaseErrorCode::UNIQUE_CONSTRAINT_VIOLATION->value) {
+                return redirect()->back()->withInput()->with('error', 'The contact number already exists. Please use a different one.');
+            }
+
+            return redirect()->back()->withInput()->with('error', 'An unexpected error occurred. Please try again later.');
+        }
     }
 
     public function show($id)
