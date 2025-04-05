@@ -1,25 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Criar Novo Contato</h1>
-    <form action="{{ route('contacts.store') }}" method="POST">
-        @csrf
-        <div class="form-group">
-            <label for="name">Nome</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
-        </div>
-        <div class="form-group">
-            <label for="contact">Telefone</label>
-            <input type="text" name="contact" id="contact" class="form-control" value="{{ old('contact') }}">
-        </div>
-        <div class="form-group">
-            <label for="message">Mensagem</label>
-            <textarea name="message" id="message" class="form-control">{{ old('message') }}</textarea>
-        </div>
-        <button type="submit" class="btn btn-success">Salvar</button>
-    </form>
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-6 text-center">Create New Contact</h1>
+        <form action="{{ route('contacts.store') }}" method="POST" class="space-y-4">
+            @csrf
+            <div class="flex flex-col">
+                <label for="name" class="text-sm font-medium text-gray-700">Name</label>
+                <input type="text" name="name" id="name" class="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" value="{{ old('name') }}" required>
+                @error('name')
+                    <span class="text-sm text-red-500 mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="flex flex-col">
+                <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+                <input type="email" name="email" id="email" class="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" value="{{ old('email') }}" required>
+                @error('email')
+                    <span class="text-sm text-red-500 mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="flex flex-col">
+                <label for="contact" class="text-sm font-medium text-gray-700">Contact</label>
+                <input type="text" name="contact" id="contact" class="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" value="{{ old('contact') }}">
+                @error('contact')
+                    <span class="text-sm text-red-500 mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="flex justify-end">
+                <button type="submit" class="bg-green-500 hover:bg-green-600 text-black font-bold py-2 px-4 rounded-md">Save</button>
+            </div>
+        </form>
+    </div>
 @endsection
