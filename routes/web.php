@@ -28,3 +28,5 @@ Route::middleware('auth')->group(function () {
     Route::put('/contacts/{id}', [ContactController::class, 'update'])->name('contacts.update');
     Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 });
+
+require __DIR__.'/auth.php';
